@@ -11,12 +11,13 @@ app.secret_key = config.SECRET_KEY
 
 # ---------------- MYSQL CONFIG ---------------- #
 
-app.config['MYSQL_HOST'] = config.MYSQL_HOST
-app.config['MYSQL_USER'] = config.MYSQL_USER
-app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
-app.config['MYSQL_DB'] = config.MYSQL_DB
+import os
 
-mysql = MySQL(app)
+app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST')
+app.config['MYSQL_PORT'] = int(os.environ.get('MYSQL_PORT', 3306))
+app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER')
+app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD')
+app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB')
 
 
 # ---------------- HOME ---------------- #
