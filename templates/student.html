@@ -1,280 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Student Dashboard</title>
 
-<style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-
-body{
-
-    background:#eef2f7;
-
-}
-
-
-/* College Logo Watermark */
-
-.watermark{
-
-    position:fixed;
-
-    top:50%;
-    left:50%;
-
-    transform:translate(-50%,-50%);
-
-    z-index:0;
-
-}
-
-
-.watermark img{
-
-    width:350px;
-
-    opacity:0.10;
-
-}
-
-
-
-.header{
-
-    background:#2c3e50;
-
-    color:white;
-
-    padding:20px 60px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    position:relative;
-
-    z-index:1;
-
-}
-
-
-.header h2{
-
-    font-size:30px;
-
-}
-
-
-
-.container{
-
-    width:90%;
-
-    margin:50px auto;
-
-    position:relative;
-
-    z-index:1;
-
-}
-
-
-
-.cards{
-
-    display:flex;
-
-    justify-content:center;
-
-    gap:30px;
-
-    flex-wrap:wrap;
-
-}
-
-
-
-.card{
-
-    width:220px;
-
-    background:white;
-
-    padding:30px;
-
-    text-align:center;
-
-    border-radius:12px;
-
-    box-shadow:0 5px 15px rgba(0,0,0,.2);
-
-    transition:.3s;
-
-}
-
-
-
-.card:hover{
-
-    transform:translateY(-8px);
-
-}
-
-
-
-.card h3{
-
-    margin:15px 0;
-
-}
-
-
-
-.card a{
-
-    text-decoration:none;
-
-    background:#3498db;
-
-    color:white;
-
-    padding:10px 20px;
-
-    border-radius:6px;
-
-    display:inline-block;
-
-}
-
-
-
-.card a:hover{
-
-    background:#2980b9;
-
-}
-
-
-
-.footer{
-
-    text-align:center;
-
-    margin-top:60px;
-
-    color:gray;
-
-    position:relative;
-
-    z-index:1;
-
-}
-
-
-</style>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
-
 <body>
 
-
-<div class="watermark">
-
-<img src="{{ url_for('static', filename='images/log.webp') }}">
-
-</div>
-
-
-
-<div class="header">
-
-
-<h2>🎓 Student Dashboard</h2>
-
-
-<h3>Welcome {{ session['name'] }}</h3>
-
-
-</div>
-
-
-
+<div class="overlay">
 
 <div class="container">
 
+<div class="glass-box" style="max-width:1100px;width:100%;">
 
-<div class="cards">
+<div class="text-center">
 
+<img src="{{ url_for('static', filename='images/college_logo.png') }}" class="logo">
 
-<div class="card">
+<h2>Student Dashboard</h2>
 
-📅
+<h5>Welcome, {{ session['name'] }} 👋</h5>
 
-<h3>View Events</h3>
+<p>College Event Management System</p>
 
-<a href="/student_events">
-Open
+</div>
+
+<hr>
+
+<div class="row text-center">
+
+<div class="col-md-6 mb-4">
+
+<div class="card shadow-lg border-0 bg-primary text-white">
+
+<div class="card-body">
+
+<i class="fas fa-calendar-alt fa-3x mb-3"></i>
+
+<h4>Total Events</h4>
+
+<h1>{{ total_events }}</h1>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-6 mb-4">
+
+<div class="card shadow-lg border-0 bg-success text-white">
+
+<div class="card-body">
+
+<i class="fas fa-user-check fa-3x mb-3"></i>
+
+<h4>My Registrations</h4>
+
+<h1>{{ my_events }}</h1>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+
+<a href="/student_events" class="btn btn-primary w-100 p-3">
+
+<i class="fas fa-calendar"></i>
+
+Browse Events
+
 </a>
 
 </div>
 
+<div class="col-md-4 mb-3">
 
+<a href="/my_registrations" class="btn btn-success w-100 p-3">
 
-<div class="card">
+<i class="fas fa-list"></i>
 
-📝
+My Registrations
 
-<h3>My Registrations</h3>
-
-<a href="/my_registrations">
-Open
 </a>
 
 </div>
 
+<div class="col-md-4 mb-3">
 
+<a href="/logout" class="btn btn-danger w-100 p-3">
 
+<i class="fas fa-sign-out-alt"></i>
 
-<div class="card">
-
-🚪
-
-<h3>Logout</h3>
-
-<a href="/logout">
 Logout
+
 </a>
 
 </div>
 
-
+</div>
 
 </div>
 
-
 </div>
 
-
-
-<div class="footer">
-
-<h3>
-College Event Management System ©2026
-</h3>
-
 </div>
-
 
 </body>
 

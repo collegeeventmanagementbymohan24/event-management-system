@@ -1,107 +1,147 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>View Events</title>
 
-    <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body{
-            font-family: Arial, sans-serif;
-            background:#f4f4f4;
-        }
+<title>View Events</title>
 
-        h2{
-            text-align:center;
-            margin-top:20px;
-        }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-        table{
-            width:95%;
-            margin:auto;
-            border-collapse:collapse;
-            background:white;
-        }
-
-        th{
-            background:#3498db;
-            color:white;
-            padding:12px;
-        }
-
-        td{
-            border:1px solid #ddd;
-            padding:10px;
-            text-align:center;
-        }
-
-        a{
-            text-decoration:none;
-            padding:6px 10px;
-            background:#3498db;
-            color:white;
-            border-radius:4px;
-        }
-
-        a:hover{
-            background:#2980b9;
-        }
-
-    </style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
 <body>
 
-<h2>All College Events</h2>
+<div class="overlay">
 
-<table>
+<div class="glass-box" style="width:95%;max-width:1200px;">
+
+<div class="text-center">
+
+<img src="{{ url_for('static', filename='images/college_logo.png') }}" class="logo">
+
+<h2>All Events</h2>
+
+<p>College Event Management System</p>
+
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category,message in messages %}
+
+<div class="alert alert-{{category}}">
+{{message}}
+</div>
+
+{% endfor %}
+{% endif %}
+{% endwith %}
+<form method="GET" class="mb-4">
+
+<div class="input-group">
+
+<input
+type="text"
+name="search"
+class="form-control"
+placeholder="Search Event..."
+value="{{ search }}">
+
+<button class="btn btn-primary">
+
+🔍 Search
+
+</button>
+
+</div>
+
+</form>
+
+<div class="table-responsive">
+
+<table class="table table-bordered table-hover table-light align-middle">
+
+<thead class="table-dark">
 
 <tr>
-    <th>ID</th>
-    <th>Title</th>
-    <th>Description</th>
-    <th>Date</th>
-    <th>Time</th>
-    <th>Venue</th>
-    <th>Category</th>
-    <th>Action</th>
+
+<th>ID</th>
+<th>Title</th>
+<th>Description</th>
+<th>Date</th>
+<th>Venue</th>
+<th>Actions</th>
+
 </tr>
+
+</thead>
+
+<tbody>
 
 {% for event in events %}
 
 <tr>
 
-    <td>{{ event[0] }}</td>
-    <td>{{ event[1] }}</td>
-    <td>{{ event[2] }}</td>
-    <td>{{ event[3] }}</td>
-    <td>{{ event[4] }}</td>
-    <td>{{ event[5] }}</td>
-    <td>{{ event[6] }}</td>
+<td>{{ event[0] }}</td>
 
-   <td>
-    <button onclick="location.href='/edit_event/{{ event[0] }}'" style="margin-right:15px;">
-        Edit
-    </button>
+<td>{{ event[1] }}</td>
 
-    <button onclick="location.href='/delete_event/{{ event[0] }}'">
-        Delete
-    </button>
+<td>{{ event[2] }}</td>
+
+<td>{{ event[3] }}</td>
+
+<td>{{ event[4] }}</td>
+
+<td>
+
+<a href="/edit_event/{{ event[0] }}" class="btn btn-warning btn-sm">
+✏ Edit
+</a>
+
+<a href="/delete_event/{{ event[0] }}"
+class="btn btn-danger btn-sm"
+onclick="return confirm('Delete this event?')">
+🗑 Delete
+</a>
+
+<a href="/registered_students/{{ event[0] }}"
+class="btn btn-primary btn-sm">
+👨‍🎓 Students
+</a>
+
 </td>
 
 </tr>
 
 {% endfor %}
 
+</tbody>
+
 </table>
 
-<br><br>
+</div>
 
-<center>
+<div class="text-center mt-4">
 
-<a href="/admin">Back to Dashboard</a>
+<a href="/add_event" class="btn btn-success">
+➕ Add New Event
+</a>
 
-</center>
+<a href="/admin" class="btn btn-secondary">
+🏠 Dashboard
+</a>
+
+</div>
+
+</div>
+
+</div>
 
 </body>
+
 </html>

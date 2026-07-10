@@ -1,207 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Admin Dashboard</title>
 
-    <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
-        font-family:Arial,sans-serif;
-    }
+<title>Admin Dashboard</title>
 
-    body{
-        background:#eef2f7;
-    }
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    .header{
-        background:#2c3e50;
-        color:white;
-        padding:20px 50px;
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        box-shadow:0 3px 10px rgba(0,0,0,.2);
-    }
-
-    .header h2{
-        font-size:30px;
-    }
-
-    .header h3{
-        font-weight:normal;
-    }
-
-    .container{
-        width:90%;
-        margin:40px auto;
-    }
-
-    .cards{
-        display:flex;
-        justify-content:center;
-        gap:30px;
-        flex-wrap:wrap;
-    }
-
-    .card{
-        width:220px;
-        background:white;
-        padding:30px;
-        text-align:center;
-        border-radius:12px;
-        box-shadow:0 5px 15px rgba(0,0,0,.15);
-        transition:0.3s;
-    }
-
-    .card:hover{
-        transform:translateY(-10px);
-    }
-
-    .icon{
-        font-size:50px;
-        margin-bottom:15px;
-    }
-
-    .card h3{
-        margin-bottom:20px;
-        color:#2c3e50;
-    }
-
-    .card a{
-        text-decoration:none;
-        background:#3498db;
-        color:white;
-        padding:10px 18px;
-        border-radius:6px;
-        display:inline-block;
-    }
-
-    .card a:hover{
-        background:#2980b9;
-    }
-
-    .stats{
-        display:flex;
-        justify-content:center;
-        gap:40px;
-        margin-top:50px;
-        flex-wrap:wrap;
-    }
-
-    .stat-box{
-        width:250px;
-        background:white;
-        padding:25px;
-        border-radius:12px;
-        text-align:center;
-        box-shadow:0 5px 15px rgba(0,0,0,.15);
-    }
-
-    .stat-box h2{
-        color:#3498db;
-        font-size:40px;
-    }
-
-    .stat-box p{
-        margin-top:10px;
-        font-size:18px;
-    }
-
-    .footer{
-        text-align:center;
-        margin-top:60px;
-        padding:20px;
-        color:gray;
-    }
-
-    </style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
 <body>
 
-<div class="header">
+<div class="container py-5">
 
-    <h2>🎓 College Event Management System</h2>
+<div class="glass-box" style="width:100%;max-width:1200px;margin:auto;">
 
-    <h3>👋 Welcome, {{ session['name'] }}</h3>
+<div class="text-center">
 
-</div>
+<img src="{{ url_for('static', filename='images/college_logo.png') }}" class="logo">
 
-<div class="container">
+<h2>Admin Dashboard</h2>
 
-    <div class="cards">
-
-        <div class="card">
-
-            <div class="icon">📝</div>
-
-            <h3>Add Event</h3>
-
-            <a href="/add_event">Open</a>
-
-        </div>
-
-        <div class="card">
-
-            <div class="icon">📅</div>
-
-            <h3>View Events</h3>
-
-            <a href="/view_events">Open</a>
-
-        </div>
-
-        <div class="card">
-
-            <div class="icon">👨‍🎓</div>
-
-            <h3>Registered Students</h3>
-
-            <a href="/registered_students">Open</a>
-
-        </div>
-
-        <div class="card">
-
-            <div class="icon">🚪</div>
-
-            <h3>Logout</h3>
-
-            <a href="/logout">Logout</a>
-
-        </div>
-
-    </div>
-
-    <div class="stats">
-
-        <div class="stat-box">
-
-            <h2>{{ total_events }}</h2>
-
-            <p>Total Events</p>
-
-        </div>
-
-        <div class="stat-box">
-
-            <h2>{{ total_students }}</h2>
-
-            <p>Registered Students</p>
-
-        </div>
-
-    </div>
+<h5>Welcome, {{ session['name'] }}</h5>
 
 </div>
 
-<div class="footer">
+<hr>
 
-    <h3>College Event Management System © 2026</h3>
+<div class="row text-center">
+
+<div class="col-md-4 mb-3">
+
+<div class="card bg-primary text-white shadow">
+
+<div class="card-body">
+
+<h5>Total Students</h5>
+
+<h2>{{ total_students }}</h2>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<div class="card bg-success text-white shadow">
+
+<div class="card-body">
+
+<h5>Total Events</h5>
+
+<h2>{{ total_events }}</h2>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<div class="card bg-warning text-dark shadow">
+
+<div class="card-body">
+
+<h5>Registrations</h5>
+
+<h2>{{ total_registrations }}</h2>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<hr>
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+
+<a href="/add_event" class="btn btn-success w-100">
+➕ Add Event
+</a>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<a href="/view_events" class="btn btn-primary w-100">
+📅 View Events
+</a>
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<a href="/logout" class="btn btn-danger w-100">
+🚪 Logout
+</a>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
