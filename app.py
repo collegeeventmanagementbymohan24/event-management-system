@@ -2,8 +2,9 @@ from flask import Flask, render_template, request, redirect, session, flash
 from flask_mysqldb import MySQL
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
-
+import os
 app = Flask(__name__)
+
 
 # ---------------- SECRET KEY ---------------- #
 
@@ -11,13 +12,13 @@ app.secret_key = config.SECRET_KEY
 
 # ---------------- MYSQL CONFIG ---------------- #
 
-import os
-
 app.config['MYSQL_HOST'] = os.environ.get('MYSQL_HOST')
 app.config['MYSQL_PORT'] = int(os.environ.get('MYSQL_PORT', 3306))
 app.config['MYSQL_USER'] = os.environ.get('MYSQL_USER')
 app.config['MYSQL_PASSWORD'] = os.environ.get('MYSQL_PASSWORD')
 app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB')
+
+mysql = MySQL(app)
 
 
 # ---------------- HOME ---------------- #
