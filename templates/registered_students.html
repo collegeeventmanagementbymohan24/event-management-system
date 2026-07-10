@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Registered Students</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+.header{
+    background:#1f3c88;
+    color:white;
+    padding:25px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.header a{
+    color:white;
+    text-decoration:none;
+    background:#162d66;
+    padding:10px 20px;
+    border-radius:8px;
+}
+
+.container{
+    width:95%;
+    margin:40px auto;
+}
+
+table{
+    width:100%;
+    background:white;
+    border-collapse:collapse;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+th{
+    background:#1f3c88;
+    color:white;
+    padding:12px;
+}
+
+td{
+    padding:12px;
+    text-align:center;
+    border-bottom:1px solid #ddd;
+}
+
+tr:hover{
+    background:#f1f5ff;
+}
+
+.empty{
+    background:white;
+    padding:40px;
+    text-align:center;
+    border-radius:15px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+    <h2>👨‍💼 Registered Students</h2>
+    <a href="/admin">Back Admin Panel</a>
+</div>
+
+<div class="container">
+
+{% if students %}
+
+<table>
+
+<tr>
+    <th>Student Name</th>
+    <th>Roll No</th>
+    <th>Email</th>
+    <th>Mobile</th>
+    <th>Class</th>
+    <th>Branch</th>
+    <th>Gender</th>
+    <th>Event Name</th>
+</tr>
+
+{% for student in students %}
+
+<tr>
+    <td>{{ student[0] }}</td>
+    <td>{{ student[1] }}</td>
+    <td>{{ student[2] }}</td>
+    <td>{{ student[3] }}</td>
+    <td>{{ student[4] }}</td>
+    <td>{{ student[5] }}</td>
+    <td>{{ student[6] }}</td>
+    <td>{{ student[7] }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% else %}
+
+<div class="empty">
+    <h2>No Registered Students</h2>
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>

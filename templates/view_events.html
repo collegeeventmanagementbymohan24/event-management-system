@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Events</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#f4f4f4;
+        }
+
+        h2{
+            text-align:center;
+            margin-top:20px;
+        }
+
+        table{
+            width:95%;
+            margin:auto;
+            border-collapse:collapse;
+            background:white;
+        }
+
+        th{
+            background:#3498db;
+            color:white;
+            padding:12px;
+        }
+
+        td{
+            border:1px solid #ddd;
+            padding:10px;
+            text-align:center;
+        }
+
+        a{
+            text-decoration:none;
+            padding:6px 10px;
+            background:#3498db;
+            color:white;
+            border-radius:4px;
+        }
+
+        a:hover{
+            background:#2980b9;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h2>All College Events</h2>
+
+<table>
+
+<tr>
+    <th>ID</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Venue</th>
+    <th>Category</th>
+    <th>Action</th>
+</tr>
+
+{% for event in events %}
+
+<tr>
+
+    <td>{{ event[0] }}</td>
+    <td>{{ event[1] }}</td>
+    <td>{{ event[2] }}</td>
+    <td>{{ event[3] }}</td>
+    <td>{{ event[4] }}</td>
+    <td>{{ event[5] }}</td>
+    <td>{{ event[6] }}</td>
+
+   <td>
+    <button onclick="location.href='/edit_event/{{ event[0] }}'" style="margin-right:15px;">
+        Edit
+    </button>
+
+    <button onclick="location.href='/delete_event/{{ event[0] }}'">
+        Delete
+    </button>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br><br>
+
+<center>
+
+<a href="/admin">Back to Dashboard</a>
+
+</center>
+
+</body>
+</html>

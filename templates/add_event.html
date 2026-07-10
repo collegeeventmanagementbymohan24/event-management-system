@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Event</title>
+</head>
+<body>
+
+<h2>Add Event</h2>
+
+<form method="POST">
+
+    <input type="text" name="title" placeholder="Event Title" required><br><br>
+
+    <textarea name="description" placeholder="Description"></textarea><br><br>
+
+    <input type="date" name="event_date" required><br><br>
+
+    <input type="time" name="event_time" required><br><br>
+
+    <input type="text" name="venue" placeholder="Venue" required><br><br>
+
+    <input type="text" name="category" placeholder="Category" required><br><br>
+    <label>Registration Deadline</label>
+
+<input type="date" name="registration_deadline" required>
+
+    <button type="submit">Add Event</button>
+
+</form>
+
+<br>
+
+<a href="/admin">Back</a>
+
+</body>
+</html><select name="category" required>
+    <option value="">Select Category</option>
+    <option>Technical</option>
+    <option>Cultural</option>
+    <option>Sports</option>
+    <option>Workshop</option>
+    <option>Seminar</option>
+    <option>Competition</option>
+    <option>Training</option>
+</select>

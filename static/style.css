@@ -1,0 +1,224 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+
+/* Common Body */
+
+body{
+
+    background:#f4f7fb;
+
+}
+
+
+
+/* Login/Register Box */
+
+.login-body{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+
+}
+
+
+
+.box{
+
+    width:380px;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:10px;
+
+    box-shadow:0 0 15px gray;
+
+}
+
+
+
+h2{
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+}
+
+
+
+input,select{
+
+    width:100%;
+
+    padding:12px;
+
+    margin:10px 0;
+
+    border:1px solid #ccc;
+
+    border-radius:5px;
+
+}
+
+
+
+button{
+
+    width:100%;
+
+    padding:12px;
+
+    background:#3498db;
+
+    border:none;
+
+    color:white;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    border-radius:5px;
+
+}
+
+
+
+button:hover{
+
+    background:#2980b9;
+
+}
+
+
+
+p{
+
+    text-align:center;
+
+    margin-top:20px;
+
+}
+
+
+
+/* College Logo Watermark */
+
+.watermark{
+
+    position:fixed;
+
+    top:50%;
+
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    z-index:0;
+
+}
+
+
+
+.watermark img{
+
+    width:350px;
+
+    opacity:0.10;
+
+}
+
+
+
+/* Tables */
+
+table{
+
+    width:95%;
+
+    margin:auto;
+
+    border-collapse:collapse;
+
+    background:white;
+
+    box-shadow:0px 0px 10px gray;
+
+}
+
+
+
+th{
+
+    background:#2c3e50;
+
+    color:white;
+
+}
+
+
+
+td,th{
+
+    padding:12px;
+
+    text-align:center;
+
+}
+
+
+
+/* Buttons */
+
+.action-btn{
+
+    display:inline-block;
+
+    margin:4px;
+
+    padding:8px 15px;
+
+    background:#3498db;
+
+    color:white;
+
+    border-radius:5px;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+}
+
+
+
+.action-btn:hover{
+
+    background:#2ecc71;
+
+}
+
+
+
+.delete-btn{
+
+    background:#e74c3c;
+
+}
+
+
+
+.delete-btn:hover{
+
+    background:#c0392b;
+
+}

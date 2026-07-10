@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Student Events</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f4f7fb;
+}
+
+.header{
+    background:#1f3c88;
+    color:white;
+    padding:25px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.header a{
+    color:white;
+    text-decoration:none;
+    background:#162d66;
+    padding:10px 20px;
+    border-radius:8px;
+}
+
+.container{
+    width:90%;
+    margin:40px auto;
+}
+
+.events{
+    display:flex;
+    flex-wrap:wrap;
+    gap:30px;
+    justify-content:center;
+}
+
+.event-card{
+    background:white;
+    width:320px;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+}
+
+.event-card h2{
+    color:#1f3c88;
+    margin-bottom:15px;
+}
+
+.event-card p{
+    margin:10px 0;
+    color:#555;
+}
+
+.register-btn{
+    display:inline-block;
+    margin-top:15px;
+    background:#27ae60;
+    color:white;
+    text-decoration:none;
+    padding:10px 20px;
+    border-radius:8px;
+}
+
+.register-btn:hover{
+    background:#219150;
+}
+
+.empty{
+    text-align:center;
+    margin-top:50px;
+    color:#777;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h2>📅 Available Events</h2>
+
+<a href="/student">Back Dashboard</a>
+
+</div>
+
+<div class="container">
+
+<div class="events">
+
+{% for event in events %}
+
+<div class="event-card">
+
+<h2>{{ event[1] }}</h2>
+
+<p><b>Description:</b><br>{{ event[2] }}</p>
+
+<p><b>Date:</b> {{ event[3] }}</p>
+
+<p><b>Time:</b> {{ event[4] }}</p>
+
+<p><b>Venue:</b> {{ event[5] }}</p>
+
+<p><b>Category:</b> {{ event[6] }}</p>
+
+<p><b>Registration Last Date:</b> {{ event[7] }}</p>
+
+<a class="register-btn"
+href="/register_event/{{ event[0] }}">
+Register
+</a>
+
+</div>
+
+{% else %}
+
+<div class="empty">
+<h2>No Events Available</h2>
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+</html>
