@@ -16,6 +16,8 @@ app.config["MYSQL_USER"] = os.environ.get("MYSQL_USER", "root")
 app.config["MYSQL_PASSWORD"] = os.environ.get("MYSQL_PASSWORD", "")
 app.config["MYSQL_DB"] = os.environ.get("MYSQL_DB", "college_event_db")
 
+app.config["MYSQL_CURSORCLASS"] = "DictCursor"
+
 mysql = MySQL(app)
 
 # ---------------- HOME ---------------- #
