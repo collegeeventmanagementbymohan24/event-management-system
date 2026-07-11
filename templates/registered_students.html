@@ -16,9 +16,7 @@
 
 <body>
 
-<div class="overlay">
-
-<div class="glass-box" style="width:95%;max-width:1200px;">
+<div class="container mt-5">
 
 <div class="text-center mb-4">
 
@@ -26,24 +24,39 @@
 
 <h2>Registered Students</h2>
 
-<p>College Event Management System</p>
-
 </div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+
+<div class="alert alert-{{ category }}">
+{{ message }}
+</div>
+
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+{% if students %}
 
 <div class="table-responsive">
 
-<table class="table table-bordered table-hover table-light align-middle">
+<table class="table table-bordered table-hover shadow">
 
 <thead class="table-dark">
 
 <tr>
 
 <th>#</th>
-
 <th>Student Name</th>
-
 <th>Email</th>
-
+<th>Event</th>
+<th>Roll No</th>
+<th>Branch</th>
+<th>Year</th>
+<th>Gender</th>
+<th>Phone</th>
 <th>Registered On</th>
 
 </tr>
@@ -58,11 +71,23 @@
 
 <td>{{ loop.index }}</td>
 
-<td>{{ student[0] }}</td>
-
 <td>{{ student[1] }}</td>
 
 <td>{{ student[2] }}</td>
+
+<td>{{ student[3] }}</td>
+
+<td>{{ student[4] }}</td>
+
+<td>{{ student[5] }}</td>
+
+<td>{{ student[6] }}</td>
+
+<td>{{ student[7] }}</td>
+
+<td>{{ student[8] }}</td>
+
+<td>{{ student[9] }}</td>
 
 </tr>
 
@@ -74,11 +99,22 @@
 
 </div>
 
+{% else %}
+
+<div class="alert alert-info text-center">
+
+No student registrations found.
+
+</div>
+
+{% endif %}
+
 <div class="text-center mt-4">
 
-<a href="/view_events" class="btn btn-secondary">
+<a href="{{ url_for('admin_dashboard') }}"
+class="btn btn-secondary">
 
-⬅ Back to Events
+⬅ Back to Dashboard
 
 </a>
 
@@ -86,7 +122,7 @@
 
 </div>
 
-</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 

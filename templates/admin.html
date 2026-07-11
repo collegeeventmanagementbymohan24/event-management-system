@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -15,98 +16,124 @@
 
 <body>
 
-<div class="container py-5">
+<div class="container mt-5">
 
-<div class="glass-box" style="width:100%;max-width:1200px;margin:auto;">
-
-<div class="text-center">
+<div class="text-center mb-4">
 
 <img src="{{ url_for('static', filename='images/college_logo.png') }}" class="logo">
 
 <h2>Admin Dashboard</h2>
 
-<h5>Welcome, {{ session['name'] }}</h5>
+<p class="fw-bold">
+
+Welcome, {{ session['name'] }}
+
+</p>
 
 </div>
 
-<hr>
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
 
-<div class="row text-center">
-
-<div class="col-md-4 mb-3">
-
-<div class="card bg-primary text-white shadow">
-
-<div class="card-body">
-
-<h5>Total Students</h5>
-
-<h2>{{ total_students }}</h2>
-
+<div class="alert alert-{{ category }}">
+{{ message }}
 </div>
 
-</div>
-
-</div>
-
-<div class="col-md-4 mb-3">
-
-<div class="card bg-success text-white shadow">
-
-<div class="card-body">
-
-<h5>Total Events</h5>
-
-<h2>{{ total_events }}</h2>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="col-md-4 mb-3">
-
-<div class="card bg-warning text-dark shadow">
-
-<div class="card-body">
-
-<h5>Registrations</h5>
-
-<h2>{{ total_registrations }}</h2>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<hr>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
 <div class="row">
 
-<div class="col-md-4 mb-3">
+<div class="col-md-4 mb-4">
 
-<a href="/add_event" class="btn btn-success w-100">
-➕ Add Event
+<div class="card text-center shadow">
+
+<div class="card-body">
+
+<h3>{{ total_students }}</h3>
+
+<p>Total Students</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4 mb-4">
+
+<div class="card text-center shadow">
+
+<div class="card-body">
+
+<h3>{{ total_events }}</h3>
+
+<p>Total Events</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="col-md-4 mb-4">
+
+<div class="card text-center shadow">
+
+<div class="card-body">
+
+<h3>{{ total_registrations }}</h3>
+
+<p>Total Registrations</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="row mt-4">
+
+<div class="col-md-3 mb-3">
+
+<a href="{{ url_for('add_event') }}" class="btn btn-primary w-100">
+
+Add Event
+
 </a>
 
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-3 mb-3">
 
-<a href="/view_events" class="btn btn-primary w-100">
-📅 View Events
+<a href="{{ url_for('view_events') }}" class="btn btn-success w-100">
+
+View Events
+
 </a>
 
 </div>
 
-<div class="col-md-4 mb-3">
+<div class="col-md-3 mb-3">
 
-<a href="/logout" class="btn btn-danger w-100">
-🚪 Logout
+<a href="{{ url_for('registered_students') }}" class="btn btn-warning w-100">
+
+Registered Students
+
+</a>
+
+</div>
+
+<div class="col-md-3 mb-3">
+
+<a href="{{ url_for('logout') }}" class="btn btn-danger w-100">
+
+Logout
+
 </a>
 
 </div>
@@ -115,7 +142,8 @@
 
 </div>
 
-</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
+
 </html>

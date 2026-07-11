@@ -13,22 +13,12 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
-<div class="mb-3">
 
-<label>Event Time</label>
-
-<input
-type="time"
-name="event_time"
-class="form-control"
-required>
-
-</div>
 <body>
 
-<div class="overlay">
+<div class="container mt-5">
 
-<div class="glass-box" style="width:600px;">
+<div class="card shadow p-4">
 
 <div class="text-center">
 
@@ -36,53 +26,49 @@ required>
 
 <h2>Add New Event</h2>
 
-<p>College Event Management System</p>
-
 </div>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
-{% for category,message in messages %}
+{% for category, message in messages %}
 
-<div class="alert alert-{{category}}">
-{{message}}
+<div class="alert alert-{{ category }}">
+{{ message }}
 </div>
 
 {% endfor %}
 {% endif %}
 {% endwith %}
 
-<form method="POST">
+<form method="POST" autocomplete="off">
 
 <div class="mb-3">
 
-<label>Event Title</label>
+<label class="form-label">Event Title</label>
 
 <input
 type="text"
 name="title"
 class="form-control"
-placeholder="Enter Event Title"
 required>
 
 </div>
 
 <div class="mb-3">
 
-<label>Description</label>
+<label class="form-label">Description</label>
 
 <textarea
 name="description"
 class="form-control"
 rows="4"
-placeholder="Enter Event Description"
 required></textarea>
 
 </div>
 
 <div class="mb-3">
 
-<label>Event Date</label>
+<label class="form-label">Event Date</label>
 
 <input
 type="date"
@@ -91,39 +77,57 @@ class="form-control"
 required>
 
 </div>
+<div class="mb-3">
+
+<label class="form-label">Event Time</label>
+
+<input
+type="time"
+name="event_time"
+class="form-control"
+required>
+
+</div>
 
 <div class="mb-3">
 
-<label>Venue</label>
+<label class="form-label">Venue</label>
 
 <input
 type="text"
 name="venue"
 class="form-control"
-placeholder="Enter Venue"
 required>
 
 </div>
 
-<button class="btn btn-success w-100">
+<button
+type="submit"
+class="btn btn-success w-100">
 
-💾 Save Event
+Add Event
 
 </button>
 
-<br><br>
+</form>
 
-<a href="/admin" class="btn btn-secondary w-100">
+<hr>
+
+<div class="text-center">
+
+<a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">
 
 ⬅ Back to Dashboard
 
 </a>
 
-</form>
-
 </div>
 
 </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 

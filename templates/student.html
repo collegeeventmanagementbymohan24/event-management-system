@@ -12,82 +12,50 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
 </head>
 
 <body>
 
-<div class="overlay">
+<div class="container mt-5">
 
-<div class="container">
-
-<div class="glass-box" style="max-width:1100px;width:100%;">
-
-<div class="text-center">
+<div class="text-center mb-4">
 
 <img src="{{ url_for('static', filename='images/college_logo.png') }}" class="logo">
 
 <h2>Student Dashboard</h2>
 
-<h5>Welcome, {{ session['name'] }} 👋</h5>
-
-<p>College Event Management System</p>
-
-</div>
-
-<hr>
-
-<div class="row text-center">
-
-<div class="col-md-6 mb-4">
-
-<div class="card shadow-lg border-0 bg-primary text-white">
-
-<div class="card-body">
-
-<i class="fas fa-calendar-alt fa-3x mb-3"></i>
-
-<h4>Total Events</h4>
-
-<h1>{{ total_events }}</h1>
+<p class="fw-bold">
+Welcome, {{ session['name'] }}
+</p>
 
 </div>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+
+<div class="alert alert-{{ category }}">
+{{ message }}
 </div>
 
-</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
-<div class="col-md-6 mb-4">
-
-<div class="card shadow-lg border-0 bg-success text-white">
-
-<div class="card-body">
-
-<i class="fas fa-user-check fa-3x mb-3"></i>
-
-<h4>My Registrations</h4>
-
-<h1>{{ my_events }}</h1>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<hr>
-
-<div class="row">
+<div class="row justify-content-center">
 
 <div class="col-md-4 mb-3">
 
-<a href="/student_events" class="btn btn-primary w-100 p-3">
+<div class="card shadow">
 
-<i class="fas fa-calendar"></i>
+<div class="card-body text-center">
+
+<h5>Browse Events</h5>
+
+<p>View all available events and register.</p>
+
+<a href="{{ url_for('student_events') }}"
+class="btn btn-primary w-100">
 
 Browse Events
 
@@ -95,11 +63,22 @@ Browse Events
 
 </div>
 
+</div>
+
+</div>
+
 <div class="col-md-4 mb-3">
 
-<a href="/my_registrations" class="btn btn-success w-100 p-3">
+<div class="card shadow">
 
-<i class="fas fa-list"></i>
+<div class="card-body text-center">
+
+<h5>My Registrations</h5>
+
+<p>View all events you have registered for.</p>
+
+<a href="{{ url_for('my_registrations') }}"
+class="btn btn-success w-100">
 
 My Registrations
 
@@ -107,11 +86,22 @@ My Registrations
 
 </div>
 
+</div>
+
+</div>
+
 <div class="col-md-4 mb-3">
 
-<a href="/logout" class="btn btn-danger w-100 p-3">
+<div class="card shadow">
 
-<i class="fas fa-sign-out-alt"></i>
+<div class="card-body text-center">
+
+<h5>Logout</h5>
+
+<p>Sign out from your account safely.</p>
+
+<a href="{{ url_for('logout') }}"
+class="btn btn-danger w-100">
 
 Logout
 
@@ -126,6 +116,8 @@ Logout
 </div>
 
 </div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 

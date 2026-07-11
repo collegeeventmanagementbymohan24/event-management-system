@@ -12,18 +12,11 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
 </head>
 
 <body>
 
-<div class="overlay">
-
-<div class="container">
-
-<div class="glass-box" style="width:100%;max-width:1200px;">
+<div class="container mt-5">
 
 <div class="text-center mb-4">
 
@@ -31,26 +24,39 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <h2>My Registered Events</h2>
 
-<p>College Event Management System</p>
+<p class="fw-bold">
+Welcome, {{ session['name'] }}
+</p>
 
 </div>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+
+<div class="alert alert-{{ category }}">
+{{ message }}
+</div>
+
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+{% if registrations %}
+
 <div class="table-responsive">
 
-<table class="table table-bordered table-hover table-light align-middle">
+<table class="table table-bordered table-hover shadow">
 
 <thead class="table-dark">
 
 <tr>
 
 <th>#</th>
-
 <th>Event Name</th>
-
+<th>Description</th>
 <th>Date</th>
-
 <th>Venue</th>
-
 <th>Registered On</th>
 
 </tr>
@@ -73,6 +79,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 <td>{{ reg[3] }}</td>
 
+<td>{{ reg[4] }}</td>
+
 </tr>
 
 {% endfor %}
@@ -83,13 +91,21 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
 </div>
 
+{% else %}
+
+<div class="alert alert-info text-center">
+
+You have not registered for any events yet.
+
+</div>
+
+{% endif %}
+
 <div class="text-center mt-4">
 
-<a href="/student" class="btn btn-secondary">
+<a href="{{ url_for('student_dashboard') }}" class="btn btn-secondary">
 
-<i class="fas fa-arrow-left"></i>
-
-Back to Dashboard
+⬅ Back to Dashboard
 
 </a>
 
@@ -97,9 +113,7 @@ Back to Dashboard
 
 </div>
 
-</div>
-
-</div>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 
