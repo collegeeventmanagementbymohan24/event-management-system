@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>College Event Management</title>
+
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}"
+>
+    
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="header">
+
+        <div class="logo-container">
+            <div class="logo-icon">🎓</div>
+
+            <div>
+                <h2>Campus Events</h2>
+                <p>College Event Management System</p>
+            </div>
+        </div>
+
+        <nav class="navbar" id="navbar">
+
+            <a href="#home">Home</a>
+            <a href="#events">Events</a>
+            <a href="#categories">Categories</a>
+            <a href="/register">Student Registration</a>
+            <a href="/login">Login</a>
+
+        </nav>
+
+        <button
+            class="menu-button"
+            id="menuButton"
+            type="button"
+        >
+            ☰
+        </button>
+
+    </header>
+
+
+    <!-- ================= HOME ================= -->
+
+    <section class="hero-section" id="home">
+
+        <div class="hero-content">
+
+            <span class="hero-label">
+                Welcome to Campus Events
+            </span>
+
+            <h1>
+                Discover, Register and Participate in
+                <span>College Events</span>
+            </h1>
+
+            <p>
+                Explore technical, cultural, sports and academic
+                events happening across the campus. Register easily
+                and never miss an exciting college event.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#events" class="primary-button">
+                    Explore Events
+                </a>
+
+                <a href="/register" class="secondary-button">
+                 Student Registration
+
+                </a>
+
+            </div>
+
+            <div class="hero-statistics">
+
+                <div class="stat-box">
+                    <h3>25+</h3>
+                    <p>Upcoming Events</p>
+                </div>
+
+                <div class="stat-box">
+                    <h3>1,500+</h3>
+                    <p>Students</p>
+                </div>
+
+                <div class="stat-box">
+                    <h3>10+</h3>
+                    <p>Departments</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="hero-card">
+
+            <div class="calendar-icon">📅</div>
+
+            <h3>Annual College Fest</h3>
+
+            <p class="event-date">
+                25 August 2026
+            </p>
+
+            <p>
+                Participate in competitions, workshops, cultural
+                programs and exciting technical events.
+            </p>
+
+            <a href="/register">
+            Student Registration
+           </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= UPCOMING EVENTS ================= -->
+
+    <section class="section events-section" id="events">
+
+        <div class="section-heading">
+
+            <span>UPCOMING EVENTS</span>
+
+            <h2>Find Your Next Campus Experience</h2>
+
+            <p>
+                Select an event and register to participate.
+            </p>
+
+        </div>
+
+        <div class="filter-buttons">
+
+            <button
+                class="filter-button active"
+                data-category="all"
+                type="button"
+            >
+                All Events
+            </button>
+
+            <button
+                class="filter-button"
+                data-category="technical"
+                type="button"
+            >
+                Technical
+            </button>
+
+            <button
+                class="filter-button"
+                data-category="cultural"
+                type="button"
+            >
+                Cultural
+            </button>
+
+            <button
+                class="filter-button"
+                data-category="sports"
+                type="button"
+            >
+                Sports
+            </button>
+
+            <button
+                class="filter-button"
+                data-category="academic"
+                type="button"
+            >
+                Academic
+            </button>
+
+        </div>
+
+        <div class="events-container">
+
+            <!-- Event 1 -->
+
+            <article
+                class="event-card"
+                data-category="technical"
+            >
+
+                <div class="event-image technical-image">
+                    <span>💻</span>
+
+                    <div class="event-tag">
+                        Technical
+                    </div>
+                </div>
+
+                <div class="event-details">
+
+                    <h3>24-Hour Coding Hackathon</h3>
+
+                    <p class="event-description">
+                        Build creative solutions and compete with
+                        talented student developers.
+                    </p>
+
+                    <div class="event-information">
+                        <p>📅 20 August 2026</p>
+                        <p>⏰ 9:00 AM</p>
+                        <p>📍 Computer Science Block</p>
+                    </div>
+
+                    <button
+                        class="register-event-button"
+                        data-event="24-Hour Coding Hackathon"
+                        type="button"
+                    >
+                        Register
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Event 2 -->
+
+            <article
+                class="event-card"
+                data-category="cultural"
+            >
+
+                <div class="event-image cultural-image">
+                    <span>🎤</span>
+
+                    <div class="event-tag">
+                        Cultural
+                    </div>
+                </div>
+
+                <div class="event-details">
+
+                    <h3>Campus Singing Competition</h3>
+
+                    <p class="event-description">
+                        Showcase your voice and compete with the best
+                        singers on campus.
+                    </p>
+
+                    <div class="event-information">
+                        <p>📅 22 August 2026</p>
+                        <p>⏰ 3:00 PM</p>
+                        <p>📍 College Auditorium</p>
+                    </div>
+
+                    <button
+                        class="register-event-button"
+                        data-event="Campus Singing Competition"
+                        type="button"
+                    >
+                        Register
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Event 3 -->
+
+            <article
+                class="event-card"
+                data-category="sports"
+            >
+
+                <div class="event-image sports-image">
+                    <span>🏏</span>
+
+                    <div class="event-tag">
+                        Sports
+                    </div>
+                </div>
+
+                <div class="event-details">
+
+                    <h3>Inter-Department Cricket</h3>
+
+                    <p class="event-description">
+                        Form your department team and compete for the
+                        championship trophy.
+                    </p>
+
+                    <div class="event-information">
+                        <p>📅 24 August 2026</p>
+                        <p>⏰ 7:30 AM</p>
+                        <p>📍 College Ground</p>
+                    </div>
+
+                    <button
+                        class="register-event-button"
+                        data-event="Inter-Department Cricket"
+                        type="button"
+                    >
+                        Register
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Event 4 -->
+
+            <article
+                class="event-card"
+                data-category="academic"
+            >
+
+                <div class="event-image academic-image">
+                    <span>📚</span>
+
+                    <div class="event-tag">
+                        Academic
+                    </div>
+                </div>
+
+                <div class="event-details">
+
+                    <h3>Research Paper Presentation</h3>
+
+                    <p class="event-description">
+                        Present innovative research ideas before
+                        faculty members and students.
+                    </p>
+
+                    <div class="event-information">
+                        <p>📅 26 August 2026</p>
+                        <p>⏰ 10:00 AM</p>
+                        <p>📍 Seminar Hall</p>
+                    </div>
+
+                    <button
+                        class="register-event-button"
+                        data-event="Research Paper Presentation"
+                        type="button"
+                    >
+                        Register
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Event 5 -->
+
+            <article
+                class="event-card"
+                data-category="technical"
+            >
+
+                <div class="event-image robotics-image">
+                    <span>🤖</span>
+
+                    <div class="event-tag">
+                        Technical
+                    </div>
+                </div>
+
+                <div class="event-details">
+
+                    <h3>Robotics Workshop</h3>
+
+                    <p class="event-description">
+                        Learn basic robotics, sensors, automation and
+                        practical robot development.
+                    </p>
+
+                    <div class="event-information">
+                        <p>📅 28 August 2026</p>
+                        <p>⏰ 11:00 AM</p>
+                        <p>📍 Electronics Laboratory</p>
+                    </div>
+
+                    <button
+                        class="register-event-button"
+                        data-event="Robotics Workshop"
+                        type="button"
+                    >
+                        Register
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Event 6 -->
+
+            <article
+                class="event-card"
+                data-category="cultural"
+            >
+
+                <div class="event-image dance-image">
+                    <span>💃</span>
+
+                    <div class="event-tag">
+                        Cultural
+                    </div>
+                </div>
+
+                <div class="event-details">
+
+                    <h3>Traditional Dance Festival</h3>
+
+                    <p class="event-description">
+                        Celebrate Indian culture through classical and
+                        traditional dance performances.
+                    </p>
+
+                    <div class="event-information">
+                        <p>📅 30 August 2026</p>
+                        <p>⏰ 5:00 PM</p>
+                        <p>📍 Open-Air Theatre</p>
+                    </div>
+
+                    <button
+                        class="register-event-button"
+                        data-event="Traditional Dance Festival"
+                        type="button"
+                    >
+                        Register
+                    </button>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= CATEGORIES ================= -->
+
+    <section class="section categories-section" id="categories">
+
+        <div class="section-heading">
+
+            <span>EVENT CATEGORIES</span>
+
+            <h2>Something for Every Student</h2>
+
+        </div>
+
+        <div class="category-container">
+
+            <div class="category-card">
+                <div class="category-icon">💻</div>
+                <h3>Technical Events</h3>
+                <p>
+                    Coding contests, hackathons, robotics,
+                    presentations and technical workshops.
+                </p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🎭</div>
+                <h3>Cultural Events</h3>
+                <p>
+                    Dance, singing, drama, fashion shows and cultural
+                    celebrations.
+                </p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🏆</div>
+                <h3>Sports Events</h3>
+                <p>
+                    Cricket, football, volleyball, badminton and
+                    indoor games.
+                </p>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">📖</div>
+                <h3>Academic Events</h3>
+                <p>
+                    Seminars, quizzes, debates, conferences and paper
+                    presentations.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= REGISTRATION ================= -->
+
+    <section class="section registration-section" id="register">
+
+        <div class="registration-information">
+
+            <span>EVENT REGISTRATION</span>
+
+            <h2>Reserve Your Place Today</h2>
+
+            <p>
+                Fill in your details and select the event in which
+                you want to participate.
+            </p>
+
+            <div class="benefit">
+                <div>✓</div>
+                <p>Simple and fast event registration</p>
+            </div>
+
+            <div class="benefit">
+                <div>✓</div>
+                <p>Receive confirmation immediately</p>
+            </div>
+
+            <div class="benefit">
+                <div>✓</div>
+                <p>Manage registered events from your dashboard</p>
+            </div>
+
+        </div>
+
+        <div class="registration-form-container">
+
+            <form id="eventRegistrationForm">
+
+                <h3>Student Registration Form</h3>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="studentName">
+                            Student Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="studentName"
+                            placeholder="Enter your full name"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentId">
+                            Student ID
+                        </label>
+
+                        <input
+                            type="text"
+                            id="studentId"
+                            placeholder="Enter student ID"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="studentEmail">
+                            Email Address
+                        </label>
+
+                        <input
+                            type="email"
+                            id="studentEmail"
+                            placeholder="Enter email address"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentPhone">
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="studentPhone"
+                            placeholder="Enter phone number"
+                            pattern="[0-9]{10}"
+                            maxlength="10"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="department">
+                            Department
+                        </label>
+
+                        <select id="department" required>
+
+                            <option value="">
+                                Select department
+                            </option>
+
+                            <option value="Computer Science">
+                                Computer Science
+                            </option>
+
+                            <option value="Data Science">
+                                Data Science
+                            </option>
+
+                            <option value="Electronics">
+                                Electronics
+                            </option>
+
+                            <option value="Commerce">
+                                Commerce
+                            </option>
+
+                            <option value="Management">
+                                Management
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studyYear">
+                            Study Year
+                        </label>
+
+                        <select id="studyYear" required>
+
+                            <option value="">
+                                Select year
+                            </option>
+
+                            <option value="1st Year">
+                                1st Year
+                            </option>
+
+                            <option value="2nd Year">
+                                2nd Year
+                            </option>
+
+                            <option value="3rd Year">
+                                3rd Year
+                            </option>
+
+                            <option value="4th Year">
+                                4th Year
+                            </option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="eventName">
+                        Select Event
+                    </label>
+
+                    <select id="eventName" required>
+
+                        <option value="">
+                            Choose an event
+                        </option>
+
+                        <option value="24-Hour Coding Hackathon">
+                            24-Hour Coding Hackathon
+                        </option>
+
+                        <option value="Campus Singing Competition">
+                            Campus Singing Competition
+                        </option>
+
+                        <option value="Inter-Department Cricket">
+                            Inter-Department Cricket
+                        </option>
+
+                        <option value="Research Paper Presentation">
+                            Research Paper Presentation
+                        </option>
+
+                        <option value="Robotics Workshop">
+                            Robotics Workshop
+                        </option>
+
+                        <option value="Traditional Dance Festival">
+                            Traditional Dance Festival
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                >
+                    Confirm Registration
+                </button>
+
+            </form>
+
+            <div
+                class="success-message"
+                id="successMessage"
+            >
+
+                <div class="success-icon">✓</div>
+
+                <h3>Registration Successful!</h3>
+
+                <p id="successText">
+                    You have successfully registered for the event.
+                </p>
+
+                <button
+                    type="button"
+                    id="registerAnotherButton"
+                >
+                    Register for Another Event
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="footer-content">
+
+            <div>
+                <h2>Campus Events</h2>
+
+                <p>
+                    Making college event participation simple,
+                    organized and enjoyable.
+                </p>
+            </div>
+
+            <div>
+                <h3>Quick Links</h3>
+                <a href="#home">Home</a>
+                <a href="#events">Events</a>
+                <a href="/register">Student Registration</a>
+                <a href="/admin">Admin</a>
+            </div>
+
+            <div>
+                <h3>Contact</h3>
+                <p>📧 events@college.edu</p>
+                <p>📞 +91 9133831716 </p>
+                <p>📍 College Campus, India</p>
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            © 2026 College Event Management System. All rights reserved.
+        </div>
+
+    </footer>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+    
+
+</body>
+</html>

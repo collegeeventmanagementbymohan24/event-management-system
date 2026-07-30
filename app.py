@@ -1,537 +1,339 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
-from flask_mysqldb import MySQL
-from werkzeug.security import generate_password_hash, check_password_hash
-from config import Config
-from datetime import datetime, date 
-import os
+from flask import Flask, render_template, request, redirect, session
+from pymongo import MongoClient
+from bson.objectid import ObjectId
+
 app = Flask(__name__)
+app.secret_key = "college_event_secret_key"
 
-app.secret_key = os.environ.get("SECRET_KEY", "college_event_secret")
+# ---------------- MongoDB Connection ----------------
+client = MongoClient("mongodb+srv://mohankasimkota2124_db_user:Mohan12345@eventmanagement.4ty9aqy.mongodb.net/?appName=eventmanagement")
 
-# ---------------- MYSQL CONFIG ---------------- #
+db = client["college_event_db"]
 
-app.config["MYSQL_HOST"] = os.environ.get("MYSQL_HOST", "localhost")
-app.config["MYSQL_PORT"] = int(os.environ.get("MYSQL_PORT", 3306))
-app.config["MYSQL_USER"] = os.environ.get("MYSQL_USER", "root")
-app.config["MYSQL_PASSWORD"] = os.environ.get("MYSQL_PASSWORD", "")
-app.config["MYSQL_DB"] = os.environ.get("MYSQL_DB", "college_event")
-
-app.config["MYSQL_CURSORCLASS"] = "DictCursor"
-
-mysql = MySQL(app)
-
-# ---------------- HOME ---------------- #
-
+students = db["students"]
+admins = db["admins"]
+events = db["events"]
+registrations = db["registrations"]
+# ---------------- Home ----------------
 @app.route("/")
 def home():
-    return redirect(url_for("login"))
+    return render_template("index.html")
 
-# ---------------- REGISTER ---------------- #
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    if request.method == "POST":
+
+        email = request.form["email"]
+        password = request.form["password"]
+
+        # Admin Login
+        if email == "admin@campusevents.com" and password == "Admin@123":
+            session["admin"] = True
+            return redirect("/admin")
+
+        # Student Login
+        student = students.find_one({
+            "email": email,
+            "password": password
+        })
+
+        if student:
+            session["student"] = str(student["_id"])
+            session["student_name"] = student["name"]
+            return redirect("/student_dashboard")
+
+        return "Invalid Email or Password!"
+
+    return render_template("login.html")
+from bson.objectid import ObjectId
+
+@app.route("/student_dashboard")
+def student_dashboard():
+
+    if "student" not in session:
+        return redirect("/login")
+
+    page = request.args.get("page")
+
+    # ---------- Dashboard ----------
+    if page is None:
+        return render_template(
+            "student_dashboard.html",
+            student_name=session["student_name"],
+            page="dashboard"
+        )
+
+    # ---------- My Registrations ----------
+    elif page == "registrations":
+
+        my_events = list(
+            registrations.find({
+                "student_id": session["student"]
+            })
+        )
+
+        return render_template(
+            "student_dashboard.html",
+            student_name=session["student_name"],
+            page="registrations",
+            registrations=my_events
+        )
+
+    # ---------- My Profile ----------
+    elif page == "profile":
+
+        student = students.find_one({
+            "_id": ObjectId(session["student"])
+        })
+
+        return render_template(
+            "student_dashboard.html",
+            student_name=session["student_name"],
+            page="profile",
+            student=student
+        )
+
+    return redirect("/student_dashboard")
+
+@app.route("/student_events")
+def student_events():
+
+    if "student" not in session:
+        return redirect("/login")
+
+    all_events = list(events.find())
+
+    return render_template(
+        "student_events.html",
+        events=all_events
+    )
+@app.route("/register_event/<id>")
+def register_event(id):
+
+    if "student" not in session:
+        return redirect("/login")
+
+    # Student Details
+    student = students.find_one({
+        "_id": ObjectId(session["student"])
+    })
+
+    # Event Details
+    event = events.find_one({
+        "_id": ObjectId(id)
+    })
+
+    # Check Duplicate Registration
+    already_registered = registrations.find_one({
+        "student_id": str(student["_id"]),
+        "event_name": event["event_name"]
+    })
+
+    if already_registered:
+        return """
+        <script>
+        alert("You have already registered for this event!");
+        window.location.href="/student_events";
+        </script>
+        """
+
+    # Registration Data
+    registration = {
+        "student_id": str(student["_id"]),
+        "name": student["name"],
+        "roll_no": student["roll_no"],
+        "branch": student["branch"],
+        "year": student["year"],
+        "gender": student["gender"],
+        "email": student["email"],
+
+        "event_name": event["event_name"],
+        "category": event["category"],
+        "date": event["date"],
+        "venue": event["venue"]
+    }
+
+    registrations.insert_one(registration)
+
+    return """
+    <script>
+    alert("Event Registered Successfully!");
+    window.location.href="/student_events";
+    </script>
+    """  
+@app.route("/admin")
+def admin():
+
+    if "admin" not in session:
+        return redirect("/login")
+
+    all_events = list(events.find())
+
+    return render_template("admin.html", events=all_events)
+
+@app.route("/forgot_password")
+def forgot_password():
+    return render_template("forgot_password.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
     if request.method == "POST":
 
-        name = request.form["name"]
-        email = request.form["email"]
-        password = generate_password_hash(request.form["password"])
-        role = "Student"
+        password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
 
-        cur = mysql.connection.cursor()
+        if password != confirm_password:
+            return "Passwords do not match!"
 
-        cur.execute(
-            "SELECT id FROM users WHERE email=%s",
-            (email,)
-        )
+        student = {
+            "name": request.form["name"],
+            "roll_no": request.form["roll_no"],
+            "branch": request.form["branch"],
+            "year": request.form["year"],
+            "gender": request.form["gender"],
+            "email": request.form["email"],
+            "password": password
+        }
 
-        account = cur.fetchone()
+        students.insert_one(student)
 
-        if account:
-            flash("Email already exists!", "danger")
-            cur.close()
-            return redirect(url_for("register"))
-
-        cur.execute("""
-            INSERT INTO users
-            (name,email,password,role)
-            VALUES(%s,%s,%s,%s)
-        """,(name,email,password,role))
-
-        mysql.connection.commit()
-
-        cur.close()
-
-        flash("Registration Successful!", "success")
-
-        return redirect(url_for("login"))
+        return """
+        <script>
+        alert("Student Registration Successful! ✔️");
+        window.location.href="/";
+        </script>
+        """
 
     return render_template("register.html")
 
-
-# ---------------- LOGIN ---------------- #
-
-@app.route("/login", methods=["GET","POST"])
-def login():
-
-    if request.method=="POST":
-
-        email=request.form["email"]
-        password=request.form["password"]
-
-        cur=mysql.connection.cursor()
-
-        cur.execute(
-            "SELECT * FROM users WHERE email=%s",
-            (email,)
-        )
-
-        user=cur.fetchone()
-
-        cur.close()
-
-        if user:
-
-            if check_password_hash(user[3],password):
-
-                session["id"]=user[0]
-                session["name"]=user[1]
-                session["email"]=user[2]
-                session["role"]=user[4]
-
-                flash("Login Successful","success")
-
-                if user[4]=="Admin":
-                    return redirect(url_for("admin_dashboard"))
-
-                return redirect(url_for("student_dashboard"))
-
-        flash("Invalid Email or Password","danger")
-
-    return render_template("login.html")
-
-
-# ---------------- LOGOUT ---------------- #
-
 @app.route("/logout")
 def logout():
-
     session.clear()
+    return redirect("/")
 
-    flash("Logged Out Successfully","success")
+@app.route("/update_profile", methods=["POST"])
+def update_profile():
 
-    return redirect(url_for("login"))
-# ---------------- FORGOT PASSWORD ---------------- #
+    if "student" not in session:
+        return redirect("/login")
 
-@app.route("/forgot_password", methods=["GET", "POST"])
-def forgot_password():
+    students.update_one(
 
-    if request.method == "POST":
+        {"_id": ObjectId(session["student"])},
 
-        email = request.form["email"]
-        new_password = generate_password_hash(request.form["password"])
+        {
 
-        cur = mysql.connection.cursor()
+            "$set":{
 
-        cur.execute(
-            "SELECT * FROM users WHERE email=%s",
-            (email,)
-        )
+                "name":request.form["name"],
+                "branch":request.form["branch"],
+                "year":request.form["year"],
+                "email":request.form["email"],
+                "password":request.form["password"]
 
-        user = cur.fetchone()
+            }
 
-        if user:
+        }
 
-            cur.execute(
-                "UPDATE users SET password=%s WHERE email=%s",
-                (new_password, email)
-            )
-
-            mysql.connection.commit()
-
-            cur.close()
-
-            flash("Password Updated Successfully!", "success")
-
-            return redirect(url_for("login"))
-
-        else:
-
-            cur.close()
-
-            flash("Email Not Found!", "danger")
-
-    return render_template("forgot_password.html")
-# ---------------- ADMIN DASHBOARD ---------------- #
-
-@app.route("/admin")
-def admin_dashboard():
-
-    if "id" not in session or session["role"] != "Admin":
-        return redirect(url_for("login"))
-
-    cur = mysql.connection.cursor()
-
-    cur.execute("SELECT COUNT(*) FROM users WHERE role='Student'")
-    total_students = cur.fetchone()[0]
-
-    cur.execute("SELECT COUNT(*) FROM events")
-    total_events = cur.fetchone()[0]
-
-    cur.execute("SELECT COUNT(*) FROM registrations")
-    total_registrations = cur.fetchone()[0]
-
-    cur.close()
-
-    return render_template(
-        "admin.html",
-        total_students=total_students,
-        total_events=total_events,
-        total_registrations=total_registrations
     )
 
-
-# ---------------- ADD EVENT ---------------- #
+    return """
+    <script>
+    alert("Profile Updated Successfully!");
+    window.location.href="/student_dashboard?page=profile";
+    </script>
+    """
 
 @app.route("/add_event", methods=["GET", "POST"])
 def add_event():
 
-    if "id" not in session or session["role"] != "Admin":
-        return redirect(url_for("login"))
-
     if request.method == "POST":
 
-        title = request.form["title"]
-        description = request.form["description"]
-        event_date = request.form["event_date"]
-        event_time = request.form['event_time']
-        venue = request.form["venue"]
+        event = {
+            "event_name": request.form["event_name"],
+            "category": request.form["category"],
+            "date": request.form["date"],
+            "venue": request.form["venue"],
+            "seats": request.form["seats"],
+            "description": request.form["description"]
+        }
 
-        cur = mysql.connection.cursor()
+        events.insert_one(event)
 
-        cur.execute("""
-            INSERT INTO events
-            (title,description,event_date,venue)
-            VALUES(%s,%s,%s,%s)
-        """,
-        (title, description, event_date, venue))
-
-        mysql.connection.commit()
-
-        cur.close()
-
-        flash("Event Added Successfully!", "success")
-
-        return redirect(url_for("view_events"))
+        return redirect("/admin")
 
     return render_template("add_event.html")
-
-
-# ---------------- VIEW EVENTS ---------------- #
-
-@app.route("/view_events")
-def view_events():
-
-    if "id" not in session or session["role"] != "Admin":
-        return redirect(url_for("login"))
-
-    cur = mysql.connection.cursor()
-
-    cur.execute("""
-        SELECT *
-        FROM events
-        ORDER BY event_date ASC
-    """)
-
-    events = cur.fetchall()
-
-    cur.close()
-
-    return render_template(
-        "view_events.html",
-        events=events
-    )
-
-
-# ---------------- DELETE EVENT ---------------- #
-
-@app.route("/delete_event/<int:event_id>")
-def delete_event(event_id):
-
-    if "id" not in session or session["role"] != "Admin":
-        return redirect(url_for("login"))
-
-    cur = mysql.connection.cursor()
-
-    # Delete registrations first
-    cur.execute(
-        "DELETE FROM registrations WHERE event_id=%s",
-        (event_id,)
-    )
-
-    # Delete event
-    cur.execute(
-        "DELETE FROM events WHERE id=%s",
-        (event_id,)
-    )
-
-    mysql.connection.commit()
-
-    cur.close()
-
-    flash("Event Deleted Successfully!", "success")
-
-    return redirect(url_for("view_events"))
-# ---------------- EDIT EVENT ---------------- #
-
-@app.route("/edit_event/<int:event_id>", methods=["GET", "POST"])
-def edit_event(event_id):
-
-    if "id" not in session or session["role"] != "Admin":
-        return redirect(url_for("login"))
-
-    cur = mysql.connection.cursor()
-
-    if request.method == "POST":
-
-        title = request.form["title"]
-        description = request.form["description"]
-        event_date = request.form["event_date"]
-        venue = request.form["venue"]
-
-        cur.execute("""
-            UPDATE events
-            SET
-                title=%s,
-                description=%s,
-                event_date=%s,
-                venue=%s
-            WHERE id=%s
-        """, (title, description, event_date, venue, event_id))
-
-        mysql.connection.commit()
-
-        cur.close()
-
-        flash("Event Updated Successfully!", "success")
-
-        return redirect(url_for("view_events"))
-
-    cur.execute("SELECT * FROM events WHERE id=%s", (event_id,))
-    event = cur.fetchone()
-
-    cur.close()
-
-    return render_template("edit_event.html", event=event)
-
-# ---------------- REGISTERED STUDENTS ---------------- #
 
 @app.route("/registered_students")
 def registered_students():
 
-    if "id" not in session or session["role"] != "Admin":
-        return redirect(url_for("login"))
+    if "admin" not in session:
+        return redirect("/login")
 
-    cur = mysql.connection.cursor()
-
-    cur.execute("""
-        SELECT
-            r.id,
-            u.name,
-            u.email,
-            e.title,
-            r.roll_no,
-            r.branch,
-            r.year,
-            r.gender,
-            r.phone,
-            r.registered_at
-        FROM registrations r
-        JOIN users u
-            ON r.student_id = u.id
-        JOIN events e
-            ON r.event_id = e.id
-        ORDER BY r.registered_at DESC
-    """)
-
-    students = cur.fetchall()
-
-    cur.close()
+    all_students = list(students.find())
 
     return render_template(
         "registered_students.html",
-        students=students
-    )
-# ---------------- STUDENT DASHBOARD ---------------- #
-
-@app.route("/student")
-def student_dashboard():
-
-    if "id" not in session or session["role"] != "Student":
-        return redirect(url_for("login"))
-
-    return render_template("student.html")
-
-
-# ---------------- STUDENT EVENTS ---------------- #
-@app.route("/student_events")
-def student_events():
-
-    if "id" not in session or session["role"] != "Student":
-        return redirect(url_for("login"))
-
-    cur = mysql.connection.cursor()
-
-    cur.execute("""
-        SELECT *
-        FROM events
-        ORDER BY event_date ASC
-    """)
-
-    events = cur.fetchall()
-
-    cur.close()
-
-    return render_template(
-        "student_events.html",
-        events=events,
-        today=date.today()
+        students=all_students
     )
 
 
-# ---------------- REGISTER EVENT ---------------- #
-@app.route("/register_event/<int:event_id>", methods=["GET", "POST"])
-def register_event(event_id):
+# ---------------- Delete Event ----------------
+@app.route("/delete_event/<id>")
+def delete_event(id):
 
-    if "id" not in session or session["role"] != "Student":
-        return redirect(url_for("login"))
+    events.delete_one({"_id": ObjectId(id)})
 
-    cur = mysql.connection.cursor()
+    return redirect("/admin")
 
-    # Get Event
-    cur.execute("SELECT * FROM events WHERE id=%s", (event_id,))
-    event = cur.fetchone()
+# ---------------- Delete Student ----------------
+@app.route("/delete_student/<id>")
+def delete_student(id):
 
-    if not event:
-        flash("Event not found!", "danger")
-        cur.close()
-        return redirect(url_for("student_events"))
+    if "admin" not in session:
+        return redirect("/login")
 
-    # Check event date
-    if event[3] < date.today():
-        flash("Registration Link Expired!", "danger")
-        cur.close()
-        return redirect(url_for("student_events"))
+    students.delete_one({"_id": ObjectId(id)})
 
-    # Already Registered?
-    cur.execute("""
-        SELECT id
-        FROM registrations
-        WHERE student_id=%s
-        AND event_id=%s
-    """, (session["id"], event_id))
+    return redirect("/registered_students")
 
-    already = cur.fetchone()
 
-    if already:
-        cur.close()
-        flash("You have already registered for this event!", "warning")
-        return redirect(url_for("student_events"))
+# ---------------- Edit Event ----------------
+@app.route("/edit_event/<id>", methods=["GET", "POST"])
+def edit_event(id):
 
     if request.method == "POST":
 
-        roll_no = request.form["roll_no"]
-        branch = request.form["branch"]
-        year = request.form["year"]
-        gender = request.form["gender"]
-        phone = request.form["phone"]
+        events.update_one(
+            {"_id": ObjectId(id)},
+            {
+                "$set": {
+                    "event_name": request.form["event_name"],
+                    "category": request.form["category"],
+                    "date": request.form["date"],
+                    "venue": request.form["venue"],
+                    "seats": request.form["seats"],
+                    "description": request.form["description"]
+                }
+            }
+        )
 
-        cur.execute("""
-            INSERT INTO registrations
-            (
-                student_id,
-                event_id,
-                roll_no,
-                branch,
-                year,
-                gender,
-                phone
-            )
-            VALUES(%s,%s,%s,%s,%s,%s,%s)
-        """,
-        (
-            session["id"],
-            event_id,
-            roll_no,
-            branch,
-            year,
-            gender,
-            phone
-        ))
+        return redirect("/admin")
 
-        mysql.connection.commit()
+    event = events.find_one({"_id": ObjectId(id)})
 
-        cur.close()
+    return render_template("edit_event.html", event=event)
 
-        flash("Event Registered Successfully!", "success")
-
-        return redirect(url_for("my_registrations"))
-
-    cur.close()
-
-    return render_template(
-        "student_event_register.html",
-        event_id=event_id
-    )
-
-
-# ---------------- MY REGISTRATIONS ---------------- #
-
-@app.route("/my_registrations")
-def my_registrations():
-
-    if "id" not in session or session["role"] != "Student":
-        return redirect(url_for("login"))
-
-    cur = mysql.connection.cursor()
-
-    cur.execute("""
-        SELECT
-            e.title,
-            e.description,
-            e.event_date,
-            e.venue,
-            r.registered_at
-        FROM registrations r
-        JOIN events e
-        ON r.event_id = e.id
-        WHERE r.student_id=%s
-        ORDER BY r.registered_at DESC
-    """, (session["id"],))
-
-    registrations = cur.fetchall()
-
-    cur.close()
-
-    return render_template(
-        "my_registrations.html",
-        registrations=registrations
-    )
-
-
-# ---------------- ERROR PAGES ---------------- #
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template("404.html"), 404
-
-
-@app.errorhandler(500)
-def internal_error(error):
-    return render_template("500.html"), 500
-
-
-# ---------------- MAIN ---------------- #
+# ---------------- Test MongoDB ----------------
+@app.route("/test")
+def test():
+    return {
+        "message": "MongoDB Connected Successfully!",
+        "students_collection": students.count_documents({}),
+        "admins_collection": admins.count_documents({})
+    }
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,147 +1,133 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Available Events</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+body{
+font-family:Arial;
+background:#f4f6fb;
+margin:0;
+}
+
+.container{
+width:90%;
+margin:40px auto;
+}
+
+h2{
+text-align:center;
+color:#4F46E5;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+th,td{
+padding:15px;
+text-align:center;
+border-bottom:1px solid #ddd;
+}
+
+th{
+background:#4F46E5;
+color:white;
+}
+
+.btn{
+
+background:#4F46E5;
+color:white;
+padding:8px 18px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+
+}
+
+.back{
+
+text-decoration:none;
+background:#4F46E5;
+color:white;
+padding:10px 18px;
+border-radius:5px;
+
+}
+
+</style>
 
 </head>
 
 <body>
 
-<div class="container mt-5">
-
-<div class="text-center mb-4">
-
-<img src="{{ url_for('static', filename='images/college_logo.png') }}" class="logo">
+<div class="container">
 
 <h2>Available Events</h2>
 
-<p>Select an event and register</p>
+<br>
 
-</div>
+<a class="back" href="/student_dashboard">
+⬅ Back
+</a>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
+<br><br>
 
-<div class="alert alert-{{ category }}">
-{{ message }}
-</div>
+<table>
 
-{% endfor %}
-{% endif %}
-{% endwith %}
+<tr>
 
-<div class="row">
+<th>ID</th>
+<th>Event Name</th>
+<th>Category</th>
+<th>Date</th>
+<th>Venue</th>
+<th>Action</th>
 
-{% if events %}
+</tr>
 
 {% for event in events %}
 
-<div class="col-md-4 mb-4">
+<tr>
 
-<div class="card shadow h-100">
+<td>{{ loop.index }}</td>
 
-<div class="card-body">
+<td>{{ event.event_name }}</td>
 
-<h4 class="text-primary">
+<td>{{ event.category }}</td>
 
-{{ event[1] }}
+<td>{{ event.date }}</td>
 
-</h4>
+<td>{{ event.venue }}</td>
 
-<hr>
 
-<p>
+<td>
 
-<strong>Description:</strong><br>
+<a href="/register_event/{{ event._id }}">
 
-{{ event[2] }}
+<button class="btn">
 
-</p>
-
-<p>
-
-<strong>Date:</strong>
-
-{{ event[3] }}
-
-</p>
-
-<p>
-
-<strong>Venue:</strong>
-
-{{ event[4] }}
-
-</p>
-
-{% if event[3] >= today %}
-
-<a href="{{ url_for('register_event', event_id=event[0]) }}"
-class="btn btn-success w-100">
-
-Register Now
-
-</a>
-
-{% else %}
-
-<button class="btn btn-danger w-100" disabled>
-
-Registration Closed
+Register
 
 </button>
 
-{% endif %}
+</a>
 
-</div>
+</td>
 
-</div>
-
-</div>
+</tr>
 
 {% endfor %}
 
-{% else %}
-
-<div class="col-12">
-
-<div class="alert alert-info text-center">
-
-No Events Available.
+</table>
 
 </div>
-
-</div>
-
-{% endif %}
-
-</div>
-
-<div class="text-center mt-4">
-
-<a href="{{ url_for('student_dashboard') }}"
-class="btn btn-secondary">
-
-⬅ Back to Dashboard
-
-</a>
-
-</div>
-
-</div>
-
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
-
 </html>

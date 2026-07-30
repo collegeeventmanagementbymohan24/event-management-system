@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#f4f6fb;
+}
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+width:240px;
+height:100vh;
+background:#4F46E5;
+color:white;
+}
+
+.sidebar h2{
+text-align:center;
+padding:25px;
+border-bottom:1px solid rgba(255,255,255,.2);
+}
+
+.sidebar a{
+display:block;
+padding:18px 25px;
+text-decoration:none;
+color:white;
+font-size:17px;
+transition:.3s;
+}
+
+.sidebar a:hover{
+background:white;
+color:#4F46E5;
+}
+
+.main{
+margin-left:240px;
+padding:30px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+.card h2{
+color:#4F46E5;
+margin-bottom:20px;
+}
+
+.card p{
+font-size:17px;
+margin:12px 0;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+table th{
+background:#4F46E5;
+color:white;
+padding:12px;
+}
+
+table td{
+padding:12px;
+text-align:center;
+border-bottom:1px solid #ddd;
+}
+
+.btn{
+background:#4F46E5;
+color:white;
+padding:10px 18px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+font-size:15px;
+}
+
+.btn:hover{
+background:#372FCF;
+}
+input{
+
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:6px;
+font-size:15px;
+margin-bottom:10px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>STUDENT</h2>
+
+<a href="/student_dashboard">Dashboard</a>
+
+<a href="/student_events">View Events</a>
+
+<a href="/student_dashboard?page=registrations">My Registrations</a>
+
+<a href="/student_dashboard?page=profile">My Profile</a>
+
+<a href="/logout">Logout</a>
+
+</div>
+
+<div class="main">
+
+{% if page=="dashboard" %}
+
+<div class="card">
+
+<h2>Welcome {{ student_name }}</h2>
+
+<p>
+Welcome to College Event Management System.
+</p>
+
+<p>
+Use the menu on the left side to view events,
+check your registrations and manage your profile.
+</p>
+
+</div>
+
+{% elif page=="registrations" %}
+
+<div class="card">
+
+<h2>My Registered Events</h2>
+
+<table>
+
+<tr>
+
+<th>ID</th>
+<th>Event</th>
+<th>Category</th>
+<th>Date</th>
+<th>Venue</th>
+
+</tr>
+
+{% for event in registrations %}
+
+<tr>
+
+<td>{{ loop.index }}</td>
+
+<td>{{ event.event_name }}</td>
+
+<td>{{ event.category }}</td>
+
+<td>{{ event.date }}</td>
+
+<td>{{ event.venue }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% elif page=="profile" %}
+
+<div class="card">
+
+<h2>My Profile</h2>
+
+<p><b>Name :</b> {{ student.name }}</p>
+
+<p><b>Roll Number :</b> {{ student.roll_no }}</p>
+
+<p><b>Branch :</b> {{ student.branch }}</p>
+
+<p><b>Year :</b> {{ student.year }}</p>
+
+<p><b>Gender :</b> {{ student.gender }}</p>
+
+<p><b>Email :</b> {{ student.email }}</p>
+
+<br>
+
+<form action="/update_profile" method="POST">
+
+<p><b>Name</b></p>
+<input type="text" name="name" value="{{ student.name }}" required>
+
+<br><br>
+
+<p><b>Branch</b></p>
+<input type="text" name="branch" value="{{ student.branch }}" required>
+
+<br><br>
+
+<p><b>Year</b></p>
+<input type="text" name="year" value="{{ student.year }}" required>
+
+<br><br>
+
+<p><b>Email</b></p>
+<input type="email" name="email" value="{{ student.email }}" required>
+
+<br><br>
+
+<p><b>Password</b></p>
+<input type="password" name="password" value="{{ student.password }}" required>
+
+<br><br>
+
+<button class="btn" type="submit">
+Update Profile
+</button>
+
+</form>
+</div>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
